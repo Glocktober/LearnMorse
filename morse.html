@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learn Morse Code</title>
+<script src="js/comp/riot.js"></script>
+<script src="js/comp/cxbtn.js"></script>
+<script src="js/comp/fla.js"></script>
+<script src="js/comp/csels.js"></script>
+<script src="js/comp/splash.js"></script>
+<script src="js/lib/voiceSyn.js"></script>
+<script src="js/lib/voiceSynChars.js"></script>
+<script src="js/GetChar.js"></script>
+<script src="js/lib/MorseKeyer.js"></script>
+<script src="js/lib/MorseCode.js"></script>
+<script src="js/lib/MorseSender.js"></script>
+<script src="js/keyHandler.js"></script>
+<script src="js/cxGames.js"></script>
+<script src="js/riotCtrl.js"></script>
+<script src="js/cwClass.js"></script>
+<link rel="stylesheet" href="css/morse.css">
+<style>
+
+</style>
+</head>
+<body>
+        
+<header id=header>
+    <H2><span id="hdr">☰</span>Learn Morse Code</H2>
+</header>
+<splash>   </splash>
+    <div id="settings" class="settings">
+
+        <div class="slideblk">
+            <fieldset class=ssx><legend>Tone: <span id="hzLab">700 </span>hz</legend>
+            <input type="range" name="hzSlider" id="hzSlider"
+            min=300 max=1200 step=20 value=700>
+            </fieldset>
+        </div>
+        <div class="slideblk">
+            <fieldset class=ssx><legend>Volume: <span id="volLab">50</span>%</legend>
+                <input type="range" name="volSlider" id="volSlider"
+                        min=0 max=100 value=50>
+            </fieldset>
+        </div>
+        
+        <div class="slideblk">
+            <fieldset class=ssx><legend>Speed: <span id="wpmLab">15 </span>WPM</legend>
+                <input type="range" name="wpmSlider" id="wpmSlider"
+                        min=6 max=28 step=2 value=15>
+            </fieldset>
+        </div>  
+        
+    </div> <!-- settings -->
+    <div class="main" id="main" >     
+        <div id="controls" class="controlRow container">
+            <div class="third">
+            <button id="gameRun" class="b1">Start</button>
+            </div>
+            <div class="third">
+            <csels id="gameSets"></csels>
+            </div>
+            <div class="third">
+            <csels id="charSets"></csels>
+            </div>
+        </div> <!--controls-->
+        <div class="keyboard" id="games">
+            <div class="container">
+                <div>
+                <cxb id="cxb1"></cxb>
+                </div>
+            </div>
+        </div> <!-- keyboad-->
+    </div> <!-- main -->
+
+<script>
+kbb = riot.mount('cxb',{letters: charSet})[0]
+kbb.on('keyPress',(l)=>keyHandlers[0](l))
+
+const csSets = {}   // Char set selections
+const gmSets = {}   // Game set selections
+
+// Add selectors to DOM
+const selectorMounts = riot.mount('csels',{})
+
+// Load game selector
+gmSel = selectorMounts[0]
+gmSel.name = "gameSet"
+gmSel.optSets = gmSets
+gmSel.prompt = "Select  Games "
+gmSel.update()
+
+// Load char set selector
+csSel = selectorMounts[1]
+csSel.name = "charSet"
+csSel.optSets = csSets
+csSel.prompt = "Select Group"
+
+kb = new GetChar()
+
+cw = new cwClass(flasher);
+cw.cxFreq(700)
+cw.cxVol(0.5)
+cw.vxVol(0.5)
+cw.cxSpeed(15,15)
+
+riot.mount("splash",{onretire: cw.resume})
+
+gameScreen = function (flag) {}
+
+torun = []
+isrun = false
+kbCnt = 0
+processKbd = async function(){
+    let id = ++kbCnt
+    let delay = function(ms){
+        return new Promise(resolve =>{
+            setTimeout(()=>resolve(ms),ms)
+        })
+    }
+    isrun = true
+    while(torun.length && isrun){
+        c = torun.shift()   
+        if (torun.length == 0) isrun = false;    
+        let g = cw.getGlyph(c)
+        // await delay(400)
+        kbb.paintChar(c)
+        kbb.paintGlyph(g)
+        await cw.cxKey(c)
+        kbb.unpaintGlyph(g)
+        kbb.unpaintChar(c)
+    }
+    isrun = false
+}
+
+playKeybd = (c) => {
+    torun.push(c)
+    kbb.paintChar(c)
+    if (!isrun) processKbd()
+}
+
+keyHandlers.unshift(playKeybd)
+
+let runningGame = false
+
+// Character set selection - Morse learning order
+csSets["First Group"] = "teaonirs"
+csSets["Second Group"] = "hdluc"
+csSets["Third Group"] = "mwfypgbv"
+csSets["Fourth Group"] = "kjxqz"
+csSets["Numbers"] = "0123456789"
+csSets["All"] = charSet
+csSel.update()
+
+csSel.on('selectionChanged',(cs)=>{
+    cset = cs
+    kbb.showOnly(cset)
+})
+let cset = csSets["All"]
+csSel.optSelect("All")
+
+
+// Game selection
+gmSets['Exercise 1'] = new G1()
+gmSets['Game 4'] = new G4()
+gmSets['Game 5'] = new G5()
+gmSets['Exercise 6'] = new G6()
+gmSets['Exercise 7'] = new G7()
+gmSel.update()
+
+var selectedGame = gmSets['Exercise 1']
+gmSel.optSelect("Exercise 1")
+
+gmSel.on('selectionChanged',(game)=>{
+    selectedGame = game
+})
+
+class Btn{
+    constructor(tag,f){
+        this.operate = f
+        this.tag = tag
+        let el = document.getElementById(tag)
+        this.el = el
+        this._txt = "click"
+        this._onTxt = "unclick"
+        el.innerText = this._txt 
+        this.state = false
+        el.addEventListener("touchstart", (e)=>e.preventDefault(),
+                {passive: false})
+        el.addEventListener("click", ()=>this.onOff())
+        el.addEventListener("touchend", ()=> this.onOff())
+
+    }
+    onOff(){
+        this.state = !this.state
+        this.el.innerText = this.state ? this._onTxt : this._txt
+        this.el.style.backgroundColor = this.state ? 'red': ''
+        setTimeout(()=>this.operate(this.state))
+    }
+    set txt(v){
+        this._txt = v
+        if (!this.state) this.el.innerText = v
+    }
+    set onTxt(v){
+        this._onTxt = v
+        if (this.state) this.el.innerHTML = v
+    }
+}
+
+window.addEventListener('load', () => {
+    var bbOn = new Btn('gameRun',()=>selectedGame.run())
+    bbOn.txt = "Start Game"
+    bbOn.onTxt = "Stop Game"
+});
+
+const hdr = document.getElementById("hdr")
+const settings = document.getElementById("settings")
+
+const hzSlider = document.getElementById("hzSlider")
+const hzLab = document.getElementById("hzLab")
+const volSlider = document.getElementById("volSlider")
+const volLab = document.getElementById("volLab")
+const wpmSlider = document.getElementById("wpmSlider")
+const wpmLab = document.getElementById("wpmLab")
+
+// Settings menu
+settings.style.display="none"
+const toggleSettings = (e) =>{
+    settings.style.display = settings.style.display == "none" ? "flex" : "none"
+    e.preventDefault()
+    settings.focus()
+}
+
+// Slider settings change value handlers
+const hzChange = (e) =>{
+    const nval = e.target.value
+    hzLab.innerText = nval + " "
+    cw.cxFreq(nval)
+}
+const volChange = (e)=>{
+    const nval = e.target.value
+    volLab.innerText = nval + ""
+    cw.cxVol(nval/100)
+    cw.vxVol(nval/100)
+}
+const wpmChange = (e)=>{
+    const nval = e.target.value
+    wpmLab.innerText = nval + " "
+    cw.cxSpeed(nval,nval)
+}
+hzSlider.addEventListener("change", hzChange)
+volSlider.addEventListener("change", volChange)
+wpmSlider.addEventListener("change", wpmChange)
+
+hdr.addEventListener("click", toggleSettings)
+hdr.addEventListener("touchend", toggleSettings)
+
+</script>
+</body>
+</html>

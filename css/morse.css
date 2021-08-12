@@ -1,0 +1,183 @@
+body{
+    margin: 0px;  
+}
+@media (orientation: portrait){
+    .buttonDiv button{
+        font-size: 24px;
+    }
+    body{
+        font-size: 15px;
+    }
+    
+}
+@media (orientation: landscape){
+    .buttonDiv button{
+        font-size: 1.8em;
+    }
+    body{
+        font-size: 2vw;
+    }
+}
+.t25{
+    width: 30%;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+.t50{
+    width: 40%;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+@media screen and (max-width:700px){
+    .gcode{
+        font-size: 1em;
+    }
+    .t25{
+        width: 10%;
+    }
+    .t50{
+        width: 80%;
+    }
+}
+html{
+    font-family: sans-serif;
+    font-size: 20px;
+    background: azure;
+}
+header {
+    background-color: rgb(31, 147, 197);
+    color: white;
+    padding: 0.2em;
+}
+h2{
+    text-align: center;
+    margin: 0.3em;
+}
+fla {
+    margin: auto;
+}
+button{
+    background-color: rgb(31, 147, 197);
+    color: white;
+    border: 2px solid gray;
+    height: fit-content;    
+    outline: none;
+}
+button:hover{
+    background-color: lightblue;
+}
+button:active{
+    background-color:deepskyblue;
+    color: white;
+}
+button:disabled{
+    background-color: #eee;
+    color: lightblue;
+    font-style: italic;
+    font-weight: lighter;
+}
+button.bright, button.bright:hover{
+    background-color: deepskyblue;
+    color: white;
+}
+select, option{
+    font-size: 1em;
+    background-color: rgb(31, 147, 197);
+    color: white;
+    border-color: transparent;
+    outline: none;
+    width: 100%;
+    text-align-last: center;
+}
+select:hover{
+    background-color: lightblue;
+    outline: none;
+}
+.hide{
+    display: none;
+}
+.buttonDiv{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5em; 
+    margin-top: 0.5em; 
+}
+.third{
+    width: 33%;
+    margin: 0.1em 1.5%;
+    padding: 10px 20px;
+}
+.controlRow{
+    align-items: center;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin: 0.5em 4%;
+}
+.controlRow button{
+    font-size: 1em;
+    border-radius: 0.4em;
+    width: 100%;
+    height: 100%;
+}
+.cxdisplay{
+    padding: 0.25em;  
+    height: 1.5em;
+    font-size: 1em;
+    margin: auto;
+    /* margin-top: 0.3em;
+    margin-bottom: 0.3em;
+    margin-left: 0.2em; */
+    justify-content: flex-start;
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: lightblue;
+    border: 0.5px solid grey;
+    border-radius: 1em;
+}
+.mcode{
+    font-size: 1.5em;
+    width: 33%;
+    align-self: center;
+}
+.gcode{
+    font-size: 1.7em;
+    position: relative;
+    width: 75%;
+    bottom: 0.125em;
+}
+.slideblk{
+    width: 33%;
+    margin: 0.5em;
+}
+.settings{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    border-bottom: 1px solid lightblue;
+}
+.settings legend{
+    font-size: 0.9em;
+    color: rgb(31, 147, 197);
+}
+.settings input{
+    width: 95%;
+    margin: auto;
+    margin-left: 2%;
+}
+.settings fieldset{
+    border-radius: 0.5em;
+    border-color: lightblue;
+    border-width: 2px;
+}
+#hdr{
+    float: right;
+    margin-right: 0.5em;
+}
