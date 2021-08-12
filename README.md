@@ -1,7 +1,7 @@
 # LearnMorse
 Browser app for more code
 
-## Preview
+## Preview This app:
  [Preview LearnMorse](https://htmlpreview.github.io/?https://github.com/Glocktober/LearnMorse/blob/main/morse.html)
 
 * Javascript implementation of a morse generator
@@ -12,5 +12,6 @@ Browser app for more code
 * Set voice and volume of the voice synthesizer
 * Multiple modes (exercises/games)
   * these currently mostly work, but they are not organized
+* Splash screen is to get by browser requirements requiring human interaction before enabling synthesis
 
 
