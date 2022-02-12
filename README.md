@@ -1,5 +1,5 @@
 # LearnMorse
-Browser app for more code
+Browser app for morse code
 
 ## Preview This app:
  [Preview LearnMorse](https://htmlpreview.github.io/?https://github.com/Glocktober/LearnMorse/blob/main/morse.html)
